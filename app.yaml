@@ -2,4 +2,5 @@ runtime: nodejs10
 
 handlers:
   - url: /.*
-    script: _api
+    script: auto
+    secure: always

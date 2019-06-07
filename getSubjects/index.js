@@ -1,15 +1,23 @@
-const Firestore = require("@google-cloud/firestore");
+const { db } = require("../db");
 
-const firestore = new Firestore();
-
-const document = firestore.doc("Data/Pages");
+const document = db.collection("Pages").doc("data");
 
 let data = null;
 
 const fetchSubjectData = () => {
   document.onSnapshot(
     docSnapshot => {
-      data = docSnapshot.data();
+      let sorted = [];
+      for (let tag in docSnapshot.data()) {
+        let object = docSnapshot.data()[tag];
+        object.id = tag;
+        sorted.push(object);
+      }
+      data = sorted.sort((a, b) => {
+        if (a.name.charAt(0) > b.name.charAt(0)) return 1;
+        if (a.name.charAt(0) < b.name.charAt(0)) return -1;
+        return 0;
+      });
     },
     err => {
       // eslint-disable-next-line no-console
