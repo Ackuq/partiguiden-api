@@ -6,7 +6,6 @@ const notAcceptedCodes = [
   "Föräldrar",
   "Tjänstetelefon"
 ];
-
 module.exports = json => {
   const year = new Date().getFullYear();
   const { person } = json.personlista;
@@ -19,7 +18,8 @@ module.exports = json => {
       bild_url_192,
       personuppgift,
       parti,
-      valkrets
+      valkrets,
+      status
     } = data;
 
     const uppgifter = personuppgift.uppgift.filter(
@@ -34,14 +34,24 @@ module.exports = json => {
       bild_url: bild_url_192,
       alder,
       parti,
-      valkrets
+      valkrets,
+      status
     };
 
-    memberObject[intressent_id] = Object.assign({}, member, { uppgifter });
     memberArray.push(member);
 
     partyMembers[parti]
       ? partyMembers[parti].push(member)
       : (partyMembers[parti] = [member]);
+
+    require("./getVoteAbsence")(intressent_id).then(
+      absence =>
+        (memberObject[intressent_id] = Object.assign(
+          {},
+          member,
+          { uppgifter },
+          { absence }
+        ))
+    );
   });
 };
