@@ -2,9 +2,12 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+require("./global");
 
-const { fetchSubjectDataFromDB, getSubjectData } = require("./getSubjects");
+const { until } = require("./utils");
+const { fetchSubjectData } = require("./getSubjects");
 const { fetchPartyData, getPartyData } = require("./getPartyData");
+const { fetchMembers, getMembers, getMember } = require("./getMemberData");
 
 if (process.env.NODE_ENV !== "production") {
   // eslint-disable-next-line node/no-unpublished-require
@@ -12,22 +15,36 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Init listeners
-fetchSubjectDataFromDB();
+fetchSubjectData();
 fetchPartyData();
+fetchMembers();
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.join(__dirname + "/index.html"));
 });
 
-app.get("/party", (req, res) => {
+app.get("/party", async (req, res) => {
   const { party, subject } = req.query;
-  res
-    .header("Access-Control-Allow-Origin", "*")
-    .json(getPartyData({ party, subject }));
+  const data = await getPartyData({ party, subject });
+  res.header("Access-Control-Allow-Origin", "*").json(data);
 });
 
-app.get("/subject", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*").json(getSubjectData());
+app.get("/subject", async (req, res) => {
+  await until(() => subjectData !== null);
+  res.header("Access-Control-Allow-Origin", "*").json(subjectData);
+});
+
+app.get("/member", async (req, res) => {
+  const { id } = req.query;
+  const member = await getMember(id);
+  res.header("Access-Control-Allow-Origin", "*").json(member);
+});
+
+app.get("/members", async (req, res) => {
+  await until(() => memberArray.length > 0);
+  const { party } = req.query;
+  const members = party ? await getMembers(party) : memberArray;
+  res.header("Access-Control-Allow-Origin", "*").json(members);
 });
 
 app.listen(process.env.PORT);
