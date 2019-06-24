@@ -31,7 +31,7 @@ module.exports = json => {
     const member = {
       id: intressent_id,
       namn: `${tilltalsnamn} ${efternamn}`,
-      bild_url: bild_url_192,
+      bild_url: bild_url_192.replace("http", "https"),
       alder,
       parti,
       valkrets,
