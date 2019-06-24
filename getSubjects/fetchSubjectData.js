@@ -8,9 +8,11 @@ module.exports = () => {
       let sorted = [];
       for (let tag in docSnapshot.data()) {
         let object = docSnapshot.data()[tag];
+        subjectObject[tag] = object;
         object.id = tag;
         sorted.push(object);
       }
+
       subjectData = sorted.sort((a, b) => {
         if (a.name.charAt(0) > b.name.charAt(0)) return 1;
         if (a.name.charAt(0) < b.name.charAt(0)) return -1;

@@ -5,4 +5,5 @@ global.memberObject = {};
 global.memberArray = [];
 global.partyMembers = {};
 global.subjectData = null;
+global.subjectObject = {};
 global.partyData = {};

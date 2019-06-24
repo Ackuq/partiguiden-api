@@ -19,6 +19,7 @@
     "fetch": true,
     "riksdagenUrl": true,
     "subjectData": true,
+    "subjectObject": true,
     "partyData": true,
     "memberArray": true,
     "memberObject": true,

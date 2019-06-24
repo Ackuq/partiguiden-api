@@ -30,8 +30,11 @@ app.get("/party", async (req, res) => {
 });
 
 app.get("/subject", async (req, res) => {
+  const { id } = req.query;
   await until(() => subjectData !== null);
-  res.header("Access-Control-Allow-Origin", "*").json(subjectData);
+  res
+    .header("Access-Control-Allow-Origin", "*")
+    .json(id ? subjectObject[id] : subjectData);
 });
 
 app.get("/member", async (req, res) => {
