@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 
 app.get("/party", async (req, res) => {
   const { party, subject } = req.query;
-  const data = await getPartyData({ party, subject });
+  const data = await getPartyData({ party: party.toLowerCase(), subject });
   res.header("Access-Control-Allow-Origin", "*").json(data);
 });
 
