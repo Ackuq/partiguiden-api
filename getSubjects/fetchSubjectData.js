@@ -1,6 +1,6 @@
-const { db } = require("../db");
+const { db } = require('../db');
 
-const document = db.collection("Pages").doc("data");
+const document = db.collection('Pages').doc('data');
 
 module.exports = () => {
   document.onSnapshot(

@@ -1,10 +1,10 @@
 const notAcceptedCodes = [
-  "sv",
-  "en",
-  "KandiderarINastaVal",
-  "Officiell e-postadress",
-  "Föräldrar",
-  "Tjänstetelefon"
+  'sv',
+  'en',
+  'KandiderarINastaVal',
+  'Officiell e-postadress',
+  'Föräldrar',
+  'Tjänstetelefon',
 ];
 module.exports = json => {
   const year = new Date().getFullYear();
@@ -19,39 +19,32 @@ module.exports = json => {
       personuppgift,
       parti,
       valkrets,
-      status
+      status,
     } = data;
 
-    const uppgifter = personuppgift.uppgift.filter(
-      el => !notAcceptedCodes.includes(el.kod)
-    );
+    const uppgifter = personuppgift.uppgift.filter(el => !notAcceptedCodes.includes(el.kod));
 
     const alder = year - fodd_ar;
 
     const member = {
       id: intressent_id,
       namn: `${tilltalsnamn} ${efternamn}`,
-      bild_url: bild_url_192.replace("http", "https"),
+      bild_url: bild_url_192.replace('http', 'https'),
       alder,
       parti,
       valkrets,
-      status
+      status,
     };
-
+    if (!intressent_id) {
+      console.log(member);
+    }
     memberArray.push(member);
 
-    partyMembers[parti]
-      ? partyMembers[parti].push(member)
-      : (partyMembers[parti] = [member]);
+    partyMembers[parti] ? partyMembers[parti].push(member) : (partyMembers[parti] = [member]);
 
-    require("./getVoteAbsence")(intressent_id).then(
+    require('./getVoteAbsence')(intressent_id).then(
       absence =>
-        (memberObject[intressent_id] = Object.assign(
-          {},
-          member,
-          { uppgifter },
-          { absence }
-        ))
+        (memberObject[intressent_id] = Object.assign({}, member, { uppgifter }, { absence }))
     );
   });
 };

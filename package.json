@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "set-env": "export GOOGLE_APPLICATION_CREDENTIALS='./serviceAccountKey.json'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "./node_modules/.bin/eslint ./ --ext .js"
   },
   "author": "Axel Pettersson",
   "license": "ISC",

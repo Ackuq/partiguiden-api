@@ -4,12 +4,11 @@ const path = require('path');
 const app = express();
 require('./global');
 
-const { until } = require('./utils');
-const { fetchSubjectData } = require('./getSubjects');
+const { fetchSubjectData, getSubjectTags } = require('./getSubjects');
 const { fetchPartyData, getPartyData } = require('./getPartyData');
 const { fetchMembers, getMembers, getMember } = require('./getMemberData');
 
-const allowedOrigins = ['https://beta.partiguiden.nu', 'https://partiguiden.nu'];
+const allowedOrigins = ['https://beta.partiguiden.nu', 'https://partiguiden.nu', 'localhost:3000'];
 
 if (process.env.NODE_ENV !== 'production') {
   // eslint-disable-next-line node/no-unpublished-require
@@ -34,29 +33,34 @@ app.get('/', (req, res) => {
   res.status(200).sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.get('/party', async (req, res) => {
-  const { party, subject } = req.query;
-  const data = await getPartyData({ party: party.toLowerCase(), subject });
-  res.json(data);
+app.get('/party/:party', (req, res) => {
+  const party = req.params.party.toLowerCase();
+  getPartyData({ party }).then(data => res.json(data));
+});
+
+app.get('/party/:party/:subject', (req, res) => {
+  const { subject } = req.params;
+  const party = req.params.party.toLowerCase();
+  getPartyData({ party: party.toLowerCase(), subject }).then(data => res.json(data));
 });
 
 app.get('/subject', async (req, res) => {
-  const { id } = req.query;
-  await until(() => subjectData !== null);
-  res.json(id ? subjectObject[id] : subjectData);
+  getSubjectTags().then(data => res.json(data));
+});
+
+app.get('/subject/:id', async (req, res) => {
+  const { id } = req.params;
+  getSubjectTags(id).then(data => res.json(data));
 });
 
 app.get('/member', async (req, res) => {
   const { id } = req.query;
-  const member = await getMember(id);
-  res.json(member);
+  getMember(id).then(data => res.json(data));
 });
 
 app.get('/members', async (req, res) => {
-  await until(() => memberArray.length > 0);
   const { party } = req.query;
-  const members = party ? await getMembers(party) : memberArray;
-  res.json(members);
+  getMembers(party).then(data => res.json(data));
 });
 
 app.listen(process.env.PORT);

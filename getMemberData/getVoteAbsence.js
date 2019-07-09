@@ -1,5 +1,4 @@
-const url = id =>
-  riksdagenUrl + `/voteringlista/?iid=${id}&utformat=JSON&gruppering=namn`;
+const url = id => riksdagenUrl + `/voteringlista/?iid=${id}&utformat=JSON&gruppering=namn`;
 
 module.exports = id =>
   fetch(url(id))
@@ -11,8 +10,6 @@ module.exports = id =>
         (parseInt(data.Nej, 10) || 0) +
         (parseInt(data.Frånvarande, 10) || 0) +
         (parseInt(data.Avstår, 10) || 0);
-      return (
-        Math.round((1 - (parseInt(data.Frånvarande, 10) || 0) / total) * 1000) /
-        10
-      );
-    });
+      return Math.round((1 - (parseInt(data.Frånvarande, 10) || 0) / total) * 1000) / 10;
+    })
+    .catch(() => -1);
