@@ -1,7 +1,7 @@
 const { until } = require('../utils');
 
 module.exports = async id => {
-  await until(() => Object.entries(memberObject).length);
+  await until(() => memberObject[id]);
 
-  new Promise(resolve => resolve(memberObject[id]));
+  return new Promise(resolve => resolve(memberObject[id]));
 };

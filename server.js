@@ -8,8 +8,6 @@ const { fetchSubjectData, getSubjectTags } = require('./getSubjects');
 const { fetchPartyData, getPartyData } = require('./getPartyData');
 const { fetchMembers, getMembers, getMember } = require('./getMemberData');
 
-const allowedOrigins = ['https://beta.partiguiden.nu', 'https://partiguiden.nu', 'localhost:3000'];
-
 if (process.env.NODE_ENV !== 'production') {
   // eslint-disable-next-line node/no-unpublished-require
   require('dotenv').config();
@@ -21,11 +19,21 @@ fetchPartyData();
 fetchMembers();
 
 app.use((req, res, next) => {
+  const allowedOrigins = [
+    'https://beta.partiguiden.nu',
+    'https://partiguiden.nu',
+    'http://localhost:3000',
+  ];
+
   const origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {
     res.set('Access-Control-Allow-Origin', origin);
   }
-  res.set('Cache-Control', 'private');
+  res.set({
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+    'Cache-Control': 'public,max-age=21600',
+  });
   next();
 });
 
@@ -53,8 +61,9 @@ app.get('/subject/:id', async (req, res) => {
   getSubjectTags(id).then(data => res.json(data));
 });
 
-app.get('/member', async (req, res) => {
-  const { id } = req.query;
+app.get('/member/:id', async (req, res) => {
+  const { id } = req.params;
+
   getMember(id).then(data => res.json(data));
 });
 
