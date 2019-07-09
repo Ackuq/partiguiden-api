@@ -26,7 +26,7 @@ app.use((req, res, next) => {
   if (allowedOrigins.indexOf(origin) > -1) {
     res.set('Access-Control-Allow-Origin', origin);
   }
-  res.set('Cache-Control', 'public,max-age=86400');
+  res.set('Cache-Control', 'private');
   next();
 });
 
