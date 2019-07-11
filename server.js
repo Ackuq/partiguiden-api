@@ -8,11 +8,13 @@ const { fetchSubjectData, getSubjectTags } = require('./getSubjects');
 const { fetchPartyData, getPartyData } = require('./getPartyData');
 const { fetchMembers, getMembers, getMember } = require('./getMemberData');
 
+/*
 const allowedOrigins = [
   'https://beta.partiguiden.nu',
   'https://partiguiden.nu',
   'http://localhost:3000',
 ];
+*/
 
 if (process.env.NODE_ENV !== 'production') {
   // eslint-disable-next-line node/no-unpublished-require
@@ -25,11 +27,14 @@ fetchPartyData();
 fetchMembers();
 
 const setHeaders = ({ res, req }) => {
+  /*
   const origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {
     res.set('Access-Control-Allow-Origin', origin);
   }
+  */
   res.set({
+    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
     'Cache-Control': 'public,max-age=21600',
