@@ -29,6 +29,7 @@ module.exports = json => {
       efternamn,
       bild_url_192,
       personuppgift,
+      personuppdrag,
       parti,
       valkrets,
       status
@@ -37,18 +38,24 @@ module.exports = json => {
     const uppgifter = personuppgift.uppgift.filter(
       el => !notAcceptedCodes.includes(el.kod)
     );
-
-    const alder = year - fodd_ar;
+    const isLeader = personuppdrag.uppdrag.find(
+      el => el.roll_kod === "Partiledare" && !el.tom
+    );
+    const age = year - fodd_ar;
 
     const member = {
       id: intressent_id,
-      namn: `${tilltalsnamn} ${efternamn}`,
-      bild_url: bild_url_192.replace("http", "https"),
-      alder,
-      parti,
-      valkrets,
+      name: `${tilltalsnamn} ${efternamn}`,
+      picture: bild_url_192.replace("http", "https"),
+      age,
+      party: parti,
+      constituency: valkrets,
       status
     };
+
+    if (isLeader) {
+      member.isLeader = true;
+    }
 
     const party = parti.toLowerCase();
 
@@ -63,7 +70,7 @@ module.exports = json => {
       memberObject[intressent_id] = Object.assign(
         {},
         member,
-        { uppgifter },
+        { missions: uppgifter },
         { absence }
       );
     });
