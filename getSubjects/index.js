@@ -1,2 +1,2 @@
-module.exports.fetchSubjectData = require('./fetchSubjectData');
-module.exports.getSubjectTags = require('./getSubjectTags');
+module.exports.fetchSubjectData = require("./fetchSubjectData");
+module.exports.getSubjectTags = require("./getSubjectTags");

@@ -1,14 +1,14 @@
-const admin = require('firebase-admin');
+const admin = require("firebase-admin");
 
-if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line node/no-unpublished-require
-  const serviceAccount = require('../serviceAccountKey.json');
+if (process.env.NODE_ENV !== "production") {
+  // eslint-disable-next-line global-require
+  const serviceAccount = require("../serviceAccountKey.json");
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccount)
   });
 } else {
   admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
+    credential: admin.credential.applicationDefault()
   });
 }
 

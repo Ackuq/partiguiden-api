@@ -1,19 +1,34 @@
-const { until } = require('../utils');
+const { until } = require("../utils");
 
-module.exports = async parties => {
+module.exports = async ({ party, search }) => {
   await until(() => memberArray.length > 0);
 
+  const filterArray = arr =>
+    arr.filter(el => el.namn.toLowerCase().includes(search.toLowerCase()));
+
   return new Promise(resolve => {
-    if (!parties) {
+    if (!party) {
+      if (search) {
+        resolve(filterArray(memberArray));
+      }
       resolve(memberArray);
     }
 
-    if (Array.isArray(parties)) {
-      const res = [];
-      parties.forEach(party => {
-        res.push(...partyMembers[party]);
+    if (Array.isArray(party)) {
+      let res = [];
+      party.forEach(p => {
+        res.push(...partyMembers[p]);
       });
+      if (search) {
+        res = filterArray(res);
+      }
       resolve(res);
-    } else resolve(partyMembers[parties]);
+    } else {
+      const arr = partyMembers[party.toLowerCase()];
+      if (search) {
+        resolve(filterArray(arr));
+      }
+      resolve(arr);
+    }
   });
 };

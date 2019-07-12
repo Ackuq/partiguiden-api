@@ -1,4 +1,4 @@
-const { until } = require('../utils');
+const { until } = require("../utils");
 
 module.exports = async id => {
   await until(() => memberObject[id]);

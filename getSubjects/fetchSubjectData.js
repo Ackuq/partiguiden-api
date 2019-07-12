@@ -1,18 +1,18 @@
-const { db } = require('../db');
+const { db } = require("../db");
 
-const document = db.collection('Pages').doc('data');
+const document = db.collection("Pages").doc("data");
 
 module.exports = () => {
   document.onSnapshot(
     docSnapshot => {
-      let data = [];
+      const data = [];
 
-      for (let tag in docSnapshot.data()) {
-        let object = docSnapshot.data()[tag];
+      Object.keys(docSnapshot.data()).forEach(tag => {
+        const object = docSnapshot.data()[tag];
         subjectObject[tag] = object;
         object.id = tag;
         data.push(object);
-      }
+      });
 
       const sorted = data.sort((a, b) => {
         if (a.name < b.name) {
